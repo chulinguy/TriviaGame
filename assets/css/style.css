@@ -1,0 +1,54 @@
+::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+  background: url(../images/background.jpg);
+  background-size: 100%, auto;
+}
+
+div {
+  outline: 1px solid red; 
+}
+
+h2 {
+  font-size: 20px; 
+  text-align: center;
+  color: black;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+span {
+  background-color: white;
+}
+
+img {
+ width: 100%;
+}
+
+.hidden {
+  display: none;
+}
+
+.qDiv {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+
+#pollChart {
+  height: 330px;
+}
+
+#mainRow{
+  height: calc(100% - 42px)
+}
+
+#page-header {
+  margin: 0;
+}
+
+#IMGcontainer {
+  background-color: white;
+}

@@ -1,0 +1,82 @@
+//Easy
+[{"question": "Which organization is currently responsible for standardizing and improving Javascript?", 
+  "choices": ["European Computer Manufacturers Association", "The Brogrammers", "AsheleyMadison.com", "The World Of Warcraft Community"], 
+  "answer": "European Computer Manufacturers Association",
+  "difficulty": "Easy"},
+
+{"question":"In a computer network, 'who' responds to data/resources requests from 'clients?",
+  "choices": ["The Waiter", "The Server", "The Hostess", "The Salesman"], 
+  "answer":"The Server",
+  "difficulty": "Easy"},
+
+{"question":"Together with Javascript and CSS, which other language forms the 'three pillars of the Web'?",
+  "choices": ["Klingon", "HyperText Markup Language", "Poor English", "LOLCODE"],
+   "answer":"HyperText Markup Language",
+   "difficulty": "Easy"},
+
+{"question":"In software engineering, what is the acronym DRY referring to?",
+  "choices":["Don't Repeat Youself", "Defensive Rushing Yards", "Data Request, yo", "Death Row Youth"], 
+  "answer":"Don't Repeat Youself",
+  "difficulty": "Easy"},
+
+{"question":"Websites sometimes send small pieces of data to be stored on the user's computer.  What are they called?",
+   "choices":["Cookies", "California rolls", "Cheerios", "Choicken of the Sea"],
+   "answer":"Cookies",
+   "difficulty": "Easy"},
+
+{"question":"In software, what is the name commonly given to a malicious softwares disguised as a legitimate software?",
+  "choices":["Tokyo Drift", "Trojan Horse", "Italian Stallion", "Texas Chainsaw Massacre"],
+   "answer":"Trojan Horse",
+   "difficulty": "Easy"},
+
+{"question":"In computer network communication, what HTTP error message is given when the client tries to access a broken link?",
+  "choices":["404 Not Found", "187 Dead on Arrival", "777 Lucky Sevens", "101 Intro to Economics"], 
+  "answer":"404 Not Found",
+  "difficulty": "Easy"},
+
+{"question":"In software communication, what is the name commonly given to an unwanted electronic message?",
+ "choices": ["Spam", "Dick Pic", "Slurpee", "Worm"],
+  "answer":"Spam",
+  "difficulty": "Easy"}, 
+
+//medium
+{"question":"Which Function method CANNOT be used to manually set context for 'this'?",
+ "choices": [".bind", ".call", ".apply", ".toSource"], 
+ "answer":".toSource",
+ "difficulty": "Medium"}, 
+
+{"question":"In Javascript, when you are in the global scope, which technique makes it possible for you to modify a local variable?",
+  "choices":["Closure", "Variable Hoisting", "Callback Hell", "Prototypal Inheritance"],
+  "answer":"Closure",
+  "difficulty": "Medium"}, 
+
+{"question":"Which of the following Javascript keywords does something significantly different from the other three?", 
+  "choices":["var", "let", "const", "new"],
+  "answer":"new",
+  "difficulty": "Medium"}, 
+
+{"question":"Which of the following is NOT part of a 'MEAN' stack?", 
+  "choices":["MongoDB", "Ember.js", "AngularJS", "Node.js"], 
+  "answer":"Ember.js",
+  "difficulty": "Medium"}, 
+
+//hard
+{"question":"In Javascript, which of the following CANNOT be considered an object under any circumstances?",
+  "choices":["Null", "NaN", "Function", "Array"], 
+  "answer":"NaN", 
+  "difficulty": "Hard"}, 
+
+{"question":"What will the following code output to the console?<pre>var a =5;\nvar b=5;\n(function(){\n &nbsp;&nbsp;var a = b = 3;\n}\n\nconsole.log('a = ', a, ', b = ', b)</pre>",
+  "choices":["a = 3, b = 3", "a = 5, b = 3", "a = 5, b = 5", "a = 3, b = 5"], 
+  "answer":"a = 5, b = 3",
+  "difficulty": "Hard"}, 
+
+{"question":"What will the following code output to the console?<pre>var a = 1\nfunction b() {\n &nbsp;&nbsp;a = 10;\n&nbsp;&nbsp;return;\n&nbsp;&nbsp;function a() {}\n}\nb();\nconsole.log(a)</pre>",
+  "choices":["1", "undefined", "10", "function (){}"],
+   "answer":"1",
+   "difficulty": "Hard"}, 
+
+{"question":"Which of the following is a common misconception about a hash table?",
+  "choices":["Its hashing function encrypts the keys", "At best, it offers constant-time lookup", "At best, it offers constant-time insertion", "It is an unordered data sctructure"], 
+  "answer":"Its hashing function encrypts keys",
+  "difficulty": "Hard"}]
