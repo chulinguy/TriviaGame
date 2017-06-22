@@ -2,6 +2,8 @@
     display: none;
 }
 
+
+
 body {
   background: url(../images/background.jpg);
   background-size: 100%, auto;
@@ -51,4 +53,8 @@ img {
 
 #IMGcontainer {
   background-color: white;
+}
+
+#question {
+  white-space: pre;
 }

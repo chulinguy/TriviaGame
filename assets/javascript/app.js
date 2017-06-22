@@ -1,44 +1,155 @@
 //Game states
 var app = {};
+app.question = '';
 app.choices = []; 
 app.answer = ''; 
+app.difficulty = '';
+app.wrongs = 0;  
+app.rights = 0;  
+app.omits = 0;
 app.timer = 0; 
 app.intervalF = function(){}; 
+app.timeoutF = function(){};
+app.questionNumber = 0;
 app.questionsForThisGame = [];  
 //game settings
+app.introWaitTime = 5; 
+app.intermissionWaitTime = 5; 
+app.pauseTimeBetweenQuestions = 4; 
 app.difficultySetting = {
-  'Easy': 4,
-  'Medium': 2,
-  'Hard': 2
+  'Easy': 1,
+  'Medium': 1,
+  'Hard': 1
 };
 app.lifelines = ['phoneAFriend','pollTheAudience', 'fiftyFifty'];
 app.difficultyTimer = {
-  'Easy': 15,
-  'Medium': 20,
-  'Hard': 30
+  'Easy': 6,
+  'Medium': 6,
+  'Hard': 6
+}
+
+//logic for choosing questions for this round 
+app.chooseQuestions = function () {
+  console.log('choosing questions for this round');
+  var that = this; 
+  var Qs = []; 
+  //for each difficulty setting
+  for (var key in that.difficultySetting) {
+    //take all questions of that difficulty, shuffle it, and pick n out of the set, where n is the value in the difficultySetting key-value pair
+    Qs = Qs.concat(chance.pickset(chance.shuffle(_.filter(this.allQuestionsAnswers, (v) => (v.difficulty === key))), that.difficultySetting[key]));
+  }
+  //update game state: questions for this game 
+  this.questionsForThisGame = Qs; 
+}
+
+//logic for showing solution if user waits out a question or answers incorrectly
+app.noGoodAnswer = function(answered) {
+  console.log("display solution");
+  clearTimeout(this.timeoutF);
+  var that = this;  
+  //logic to determine if we should trigger next question or trigger either intermission or gameover
+  if (this.questionNumber === this.difficultySetting.Easy){
+    this.timeoutF = setTimeout(that.intermission.bind(that), that.pauseTimeBetweenQuestions * 1000);
+  } else if (this.questionNumber === _.reduce(this.difficultySetting, (memo, value) => (memo + value))){
+    this.timeoutF = setTimeout(that.gameOver.bind(that), that.pauseTimeBetweenQuestions * 1000);
+  } else {
+    this.timeoutF = setTimeout(that.nextQuestion.bind(that), that.pauseTimeBetweenQuestions * 1000);
+  }
+  //update game states
+  if (answered) {
+    this.wrongs++;
+  } else {
+    this.omits++; 
+  }
+  this.timer = that.pauseTimeBetweenQuestions;
+  //update onscreen displays
+  $('#question').text(`The correct answer is ${this.answer}`);
+  $('#timeLeft').html(that.pauseTimeBetweenQuestions);
 }
 
 //logic for nextQuestion method 
 app.nextQuestion = function () {
-  console.log('nextQuestion is being called!')
+  console.log('moving onto next question')
+  var that = this; 
+  //update states
+  this.question = this.questionsForThisGame[this.questionNumber].question;
+  this.choices = this.questionsForThisGame[this.questionNumber].choices;
+  this.answer = this.questionsForThisGame[this.questionNumber].answer;
+  this.difficulty = this.questionsForThisGame[this.questionNumber].difficulty;
+  this.questionNumber++; 
+  this.timer = this.difficultyTimer[this.difficulty];
+  //render updated states
+  this.render();
+  //if user times out, move to noGoodAnswer logic
+  this.timeoutF = setTimeout(that.noGoodAnswer.bind(that), that.difficultyTimer[that.difficulty] * 1000);
 }
 
-//TODO: question rendering logic
+//regular rendering logic
+app.render = function () {
+  console.log("rendering question info to DOM");
+  var that = this; 
+  $('#timeLeft').text(that.difficultyTimer[that.difficulty]);
+  $('#QID').text(that.questionNumber);
+  $('#Qdiff').text(that.difficulty);
+  $('#question').text(that.question);
+  //TODO: render buttons
+}
+//intermission logic
+app.intermission = function(){
+  console.log('intermission time!');
+  var that = this; 
+  $('#question').text("Now the game gets a lot tougher!  You have ${that.difficultyTimer.Medium} seconds to answer medium questions and ${that.difficultyTimer.Hard} seconds to answer hard questions. I hope you\'ve been saving your lifelines...")
+   this.timeoutF = setTimeout(that.nextQuestion.bind(that), that.intermissionWaitTime * 1000);
+   this.timer = that.intermissionWaitTime;
+  $('#timeLeft').html(that.intermissionWaitTime);
+}
+
+//game over logic
+app.gameOver = function(){
+  console.log('game over!'); 
+  clearInterval(this.intervalF);
+  clearTimeout(this.timeoutF);
+  $('#timeLeft').text('');
+  $('#QID').text('');
+  $('#Qdiff').text('');
+  $('#question').text('Game over!');
+}
+
+//logic to update on screen count-down
 app.updateTimer = function (){
+  console.log("inside update timer");
   this.timer--;  
   $('#timeLeft').html(this.timer);
-  console.log("inside update timer")
 }
 
-//initializing
+//initializing logic
 app.initialize = function (){
-  var that = this;  
   console.log('Game is starting')
-  
+  var that = this;  
+  //reset values
+  this.questionsForThisGame = []; 
+  this.wrongs = 0;  
+  this.rights = 0;  
+  this.omits = 0;
+  this.questionNumber = 0;
+  //active intro wait time trigger; 
+  this.timer = this.introWaitTime; 
+  this.initRender(this.timer);
+  this.timeoutF = setTimeout(that.nextQuestion.bind(that), that.introWaitTime * 1000);
+  //activate non-stop timer logic
+  this.intervalF = setInterval(that.updateTimer.bind(that)
+  ,1000);
+  this.chooseQuestions();
+}
 
-  //reset values???
+//logic for initial rendering
+app.initRender = function (time) {
+  console.log('rendering initial message and images')
+  var that = this;  
   //hide start button
   $('#startButton').toggle();
+  //hide all choice buttons
+  $('.choices').hide();
   //render host image
   $('#IMGcontainer').html('<img id="regis" src="assets/images/regis.jpg">');
   //create and render lifelines
@@ -59,20 +170,10 @@ app.initialize = function (){
     //add it to DOM
     $('#LLcontainer').append(LLdiv);
   })
+  //update timer
+  $('#timeLeft').html(time);
   //update the question text
-  $('#question').text('Let the game begin! Note that you have three lifelines: Phone a Friend, Poll the Audience, and Fifty-fifty.  You can only use one lifeline per game because Chi was too lazy to figure out the extra logic.')
-  var tenSeconds = 10; 
-  this.timer = tenSeconds;  
-  $('#timeLeft').html(tenSeconds);
-  //active 5-sec time counter; 
-  this.intervalF = setInterval(app.updateTimer.bind(that)
-  , 1000)
-
-  setTimeout(function(){
-    console.log("trying to clear timeout")
-    clearTimeout(app.intervalF); 
-    app.nextQuestion();
-  }, tenSeconds * 1000);
+  $('#question').text(`Let the game begin! You have ${that.difficultyTimer.Easy} seconds to answer each easy question!  Note that you have three lifelines: Phone a Friend, Poll the Audience, and Fifty-fifty.  You can only use one lifeline per game because Chi was too lazy to figure out the extra logic.`)
 }
 
 $('#startButton').on('click', () => (app.initialize()));
@@ -80,7 +181,7 @@ $('#startButton').on('click', () => (app.initialize()));
 //all the questions and answers for the game
 app.allQuestionsAnswers = [
   {"question": "Which organization is currently responsible for standardizing and improving Javascript?", 
-    "choices": ["European Computer Manufacturers Association", "The Brogrammers", "AsheleyMadison.com", "The World Of Warcraft Community"], 
+    "choices": ["European Computer Manufacturers Association", "The Brogrammers", "AshleyMadison.com", "The World Of Warcraft Community"], 
     "answer": "European Computer Manufacturers Association",
     "difficulty": "Easy"},
 
@@ -119,7 +220,7 @@ app.allQuestionsAnswers = [
     "answer":"Spam",
     "difficulty": "Easy"}, 
 
-  {"question":"Which Function method CANNOT be used to manually set context for 'this'?",
+  {"question":"Which Javascript Function method CANNOT be used to manually set context for 'this'?",
     "choices": [".bind", ".call", ".apply", ".toSource"], 
     "answer":".toSource",
     "difficulty": "Medium"}, 
@@ -134,7 +235,7 @@ app.allQuestionsAnswers = [
     "answer":"new",
     "difficulty": "Medium"}, 
 
-  {"question":"Which of the following is NOT part of a 'MEAN' stack?", 
+  {"question":"Which of the following technology is NOT part of a 'MEAN' stack?", 
     "choices":["MongoDB", "Ember.js", "AngularJS", "Node.js"], 
     "answer":"Ember.js",
     "difficulty": "Medium"}, 
@@ -145,12 +246,12 @@ app.allQuestionsAnswers = [
     "answer":"NaN", 
     "difficulty": "Hard"}, 
 
-  {"question":"What will the following code output to the console?<pre>var a =5;\nvar b=5;\n(function(){\n &nbsp;&nbsp;var a = b = 3;\n}\n\nconsole.log('a = ', a, ', b = ', b)</pre>",
+  {"question":`What will the following code output to the console?\nvar a =5;\nvar b=5;\n(function(){\nvar a = b = 3;\n}\n\nconsole.log('a = ', a, ', b = ', b)`,
     "choices":["a = 3, b = 3", "a = 5, b = 3", "a = 5, b = 5", "a = 3, b = 5"], 
     "answer":"a = 5, b = 3",
     "difficulty": "Hard"}, 
 
-  {"question":"What will the following code output to the console?<pre>var a = 1\nfunction b() {\n &nbsp;&nbsp;a = 10;\n&nbsp;&nbsp;return;\n&nbsp;&nbsp;function a() {}\n}\nb();\nconsole.log(a)</pre>",
+  {"question":`What will the following code output to the console?\nvar a = 1\nfunction b() {\na = 10;\nreturn;\nfunction a() {}\n}\nb();\nconsole.log(a)`,
     "choices":["1", "undefined", "10", "function (){}"],
     "answer":"1",
     "difficulty": "Hard"}, 
