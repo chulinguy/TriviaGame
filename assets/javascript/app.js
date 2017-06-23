@@ -14,19 +14,19 @@ app.questionNumber = 0;
 app.questionsForThisGame = []; 
 app.LLusedThisRound = false;   
 //game settings
-app.introWaitTime = 2; 
-app.intermissionWaitTime = 2; 
-app.pauseTimeBetweenQuestions = 2; 
+app.introWaitTime = 4; 
+app.intermissionWaitTime = 5; 
+app.pauseTimeBetweenQuestions = 4; 
 app.difficultySetting = {
-  'Easy': 2,
+  'Easy': 4,
   'Medium': 2,
   'Hard': 2
 };
 app.lifelines = ['phoneAFriend','pollTheAudience', 'fiftyFifty'];
 app.difficultyTimer = {
-  'Easy': 60,
-  'Medium': 60,
-  'Hard': 60
+  'Easy': 15,
+  'Medium': 20,
+  'Hard': 30
 }
 
 //logic for choosing questions for this round 
