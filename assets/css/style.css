@@ -2,16 +2,15 @@
     display: none;
 }
 
-
+/*div {
+  outline: 1px solid red; 
+}*/
 
 body {
   background: url(../images/background.jpg);
   background-size: 100%, auto;
 }
 
-div {
-  outline: 1px solid red; 
-}
 
 h2 {
   font-size: 20px; 
@@ -29,15 +28,40 @@ img {
  width: 100%;
 }
 
+code {
+  max-width: 300px; 
+  
+}
+
+pre {
+  text-align: left;
+  max-width: 300px; 
+  display: block;
+  margin-left: auto;
+  margin-right: auto 
+}
+
+p {
+  font-size: 16px;  
+}
+
 .hidden {
   display: none;
 }
 
-.qDiv {
-  font-size: 16px;
+.qInfoDiv {
+  font-size: 20px;  
   font-weight: bold;
 }
 
+.btn-primary {
+  min-height: 50px;
+}
+
+.row {
+  margin: 0;
+  width: 100%;
+}
 
 #pollChart {
   height: 330px;
@@ -55,6 +79,28 @@ img {
   background-color: white;
 }
 
-#question {
+
+
+code {
   white-space: pre;
+
+}
+
+#qDiv {
+  padding-top: 10px;
+}
+
+
+#LLcontainer {
+  height: auto;
+}
+
+#game {
+  padding: 0;
+  position: relative;
+}
+
+#choices {
+  position: absolute;
+  bottom: 0;
 }
