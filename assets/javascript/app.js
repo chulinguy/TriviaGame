@@ -24,9 +24,9 @@ app.difficultySetting = {
 };
 app.lifelines = ['phoneAFriend','pollTheAudience', 'fiftyFifty'];
 app.difficultyTimer = {
-  'Easy': 15,
-  'Medium': 20,
-  'Hard': 30
+  'Easy': 60,
+  'Medium': 60,
+  'Hard': 60
 }
 
 //logic for choosing questions for this round 
@@ -205,6 +205,7 @@ app.initRender = function (time) {
     //logic for creating lifeline images
     var LLimg = $('<img>');
     LLimg.attr('src', `assets/images/${v}.png`)
+    LLimg.css({'cursor': 'pointer'})
     LLdiv.append(LLimg);
     //attach click event listener
     LLdiv.on('click', function() {
@@ -247,7 +248,7 @@ app.allQuestionsAnswers = [
     "difficulty": "Easy"},
 
   {"question":"Together with Javascript and CSS, which other language forms the 'three pillars of the Web'?",
-    "choices": ["Klingon", "HyperText Markup Language", "Poor English", "LOLCODE"],
+    "choices": ["Klingon", "HyperText Markup Language", "Profanity", "LOLCODE"],
     "answer":"HyperText Markup Language",
     "difficulty": "Easy"},
 
@@ -337,11 +338,12 @@ app.fiftyFifty = function () {
   var copyArr = this.choices.slice();
   copyArr.splice((copyArr.indexOf(that.answer)),1);
   copyArr.splice(Math.floor(Math.random() *3),1);
-  _.each(copyArr, function(v){
-    console.log($('.btn-primary').attr('data'))
-  })
-    
-  
+  for (var i = 0; i< 2 ; i++){
+   $('.btn-primary').filter(function(){
+     return $(this).attr('data') == copyArr[i]; 
+   }).addClass('hidden');
+
+  }
 }
 
 // logic for "Phone a friend" life line
